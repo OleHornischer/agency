@@ -15,7 +15,7 @@ class Agent(instructions: AgentInstructions) : Runnable {
     init {
         session = Session()
         route = Route.instantiate(instructions.route)
-        instructions.seedParameters.forEach { session.put(SessionKeys.valueOf(it.key), it.value) }
+        instructions.seedParameters.forEach { session.put(it.key, it.value) }
     }
 
     var finished = false
@@ -34,7 +34,8 @@ class Agent(instructions: AgentInstructions) : Runnable {
         val start = LocalDateTime.now()
         try {
             serviceCall.execute(this)
-            successes++
+            if (serviceCall.verify(this)) successes++
+            else errors++
         } catch (e: Exception) {
             e.printStackTrace()
             errors++

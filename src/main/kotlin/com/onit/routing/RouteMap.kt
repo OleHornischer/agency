@@ -3,28 +3,21 @@ package com.onit.routing
 import com.onit.configuration.Configuration
 import com.onit.service_calls.Done
 import com.onit.service_calls.ServiceCall
-import com.onit.service_calls.UserNamePasswordAuthenticator
-import okhttp3.internal.immutableListOf
-import org.openapitools.client.infrastructure.ApiClient
 import org.reflections.Reflections
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 object RouteMap {
 
-    val routeMap = LinkedHashMap<KClass<out ServiceCall>, List<KClass<out ServiceCall>>>()
+    val routeMap = LinkedHashMap<String, List<String>>()
 
     fun init() {
         val serviceCalls = Reflections(Configuration.getServiceCallPackages()).getSubTypesOf(ServiceCall::class.java)
         serviceCalls
-            .map { it.kotlin }
             .forEach {
-                val instance = it.primaryConstructor?.call()
-                routeMap.put(it, instance?.nextPossibleCalls() ?: immutableListOf(Done::class))
+                val instance = it.getConstructor()?.newInstance()
+                if (null != instance)
+                routeMap.put(instance.getId(), instance.nextPossibleCalls())
             }
-        ApiClient.builder.authenticator(UserNamePasswordAuthenticator())
-
     }
-
-    fun nextCallsFor(serviceCall: KClass<out ServiceCall>) = routeMap.getOrDefault(serviceCall, listOf(Done::class))
 }

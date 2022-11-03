@@ -1,11 +1,9 @@
 package com.onit.routing
 
-import okhttp3.internal.immutableListOf
 import org.reflections.Reflections
 import java.io.File
 import java.nio.file.Files
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 
 class Schedule private constructor(private val assignments: List<AgentInstructions>) {
@@ -13,7 +11,7 @@ class Schedule private constructor(private val assignments: List<AgentInstructio
     private var next = 0
 
     companion object {
-        fun init() = Schedule(immutableListOf(AgentInstructions(RandomRoute::class, emptyMap())))
+        fun init() = Schedule(listOf(AgentInstructions(RandomRoute::class, emptyMap())))
 
         fun init(file: String): Schedule {
             @Suppress("UNCHECKED_CAST")

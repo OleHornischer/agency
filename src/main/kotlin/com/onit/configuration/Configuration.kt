@@ -37,13 +37,7 @@ object Configuration {
         return get(Key("service.call.packages", stringType)).split(";")
     }
 
-    fun getInitialRandomServiceCall(): KClass<out ServiceCall> {
-        val initialServiceCallClassName = get(Key("initial.random.service.call", stringType))
-        val configuredClass = Class.forName(initialServiceCallClassName).kotlin
-        @Suppress("UNCHECKED_CAST")
-        return if (configuredClass.isSubclassOf(ServiceCall::class)) configuredClass as KClass<out ServiceCall>
-        else throw Misconfiguration("Configured initial service call class is not of type ServiceCall")
-    }
+    fun getInitialRandomServiceCall() = get(Key("initial.random.service.call", stringType))
 
     private fun <T> get(configurationKey: Key<T>): T {
         return config.get(configurationKey)

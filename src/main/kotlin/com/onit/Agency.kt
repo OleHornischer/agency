@@ -1,7 +1,6 @@
 package com.onit
 
 import com.onit.agent.Agent
-import com.onit.agent.SessionKeys
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.default
@@ -66,7 +65,7 @@ class Agency : CliktCommand() {
         }
         println("Completed execution at " + LocalDateTime.now())
         if (plotGraph) Graphing.plotGraph(agents)
-        throw ProgramResult(if (agents.sumBy { it.errors } > errorThreshold) 1 else 0)
+        throw ProgramResult(if (agents.sumOf { it.errors } > errorThreshold) 1 else 0)
     }
 
     private fun spawnAgent(schedule: Schedule, executorService: ExecutorService): Agent {
