@@ -5,9 +5,10 @@ import kotlin.reflect.KClass
 
 class Done : ServiceCall() {
 
+
     companion object {
-        val description = "Done"
-        val ID = "DONE"
+        const val description = "Done"
+        const val ID = "DONE"
     }
 
     override fun execute(agent: Agent) = println("Agent is done.")
